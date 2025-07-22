@@ -21,6 +21,7 @@
                 <h4>Cadastre-se para acessar o material gratuito e o grupo de networking 👇</h4>
                 <form id="whatsapp-form">
                     <input type="text" id="nome" placeholder="Seu nome" required />
+                    <input type="text" id="email" placeholder="Seu melhor email" required />
                     <input type="text" id="telefone" placeholder="Seu WhatsApp (com DDD)" required />
                     <button type="submit" class="btn">Acesse os templates gratuitos</button>
                 </form>
@@ -39,26 +40,20 @@
             e.preventDefault();
 
             const nome = document.getElementById("nome").value.trim();
+            const email = document.getElementById("email").value.trim();
             const telefoneInput = document.getElementById("telefone");
             const telefone = telefoneInput.value.replace(/\D/g, ""); // remove não-números
 
-            const telefoneValido = /^(\d{2})(9\d{8})$/.test(telefone);
-
-            if (!telefoneValido) {
-                alert("Por favor, insira um número de WhatsApp válido com DDD. Exemplo: 11912345678");
-                telefoneInput.focus();
-                return;
-            }
-
             try {
-                await fetch("https://SEU-WEBHOOK.n8n.cloud/webhook/pagina-materiais", {
+                await fetch("https://n8n.johnvic.shop/webhook/leadmagnet", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
                         nome: nome,
-                        telefone: telefone
+                        telefone: telefone,
+                        email: email
                     })
                 });
 
