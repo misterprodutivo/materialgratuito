@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Materiais gratuitos | Omni IA</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" href="logo.png" />
+    <meta name="description"
+        content="Automatize seu negócio com inteligência artificial. Agentes, fluxos e soluções com IA sob medida para empresas.">
+</head>
+
+<body>
+    <section class="hero">
+        <div class="container">
+            <h2>Entre no nosso grupo gratuito para ter acesso a diversos materiais gratuitos</h2>
+            <p>Templates de automações de n8n gratuitos + networking.</p>
+
+            <div class="modal-content">
+                <h4>Vamos entender sua necessidade 👇</h4>
+                <form id="whatsapp-form">
+                    <input type="text" id="nome" placeholder="Seu nome" required />
+                    <input type="text" id="telefone" placeholder="Seu WhatsApp (com DDD)" required />
+                    <button type="submit" class="btn">Acesse os templates gratuitos</button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Omni IA. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <script>
+        document.getElementById("whatsapp-form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const nome = document.getElementById("nome").value.trim();
+            const telefoneInput = document.getElementById("telefone");
+            const telefone = telefoneInput.value.replace(/\D/g, ""); // remove não-números
+
+            const telefoneValido = /^(\d{2})(9\d{8})$/.test(telefone);
+
+            if (!telefoneValido) {
+                alert("Por favor, insira um número de WhatsApp válido com DDD. Exemplo: 11912345678");
+                telefoneInput.focus();
+                return;
+            }
+
+            try {
+                await fetch("https://SEU-WEBHOOK.n8n.cloud/webhook/pagina-materiais", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nome: nome,
+                        telefone: telefone
+                    })
+                });
+
+                // Redireciona para o grupo do WhatsApp
+                window.location.href = "https://chat.whatsapp.com/JHYmOfFvMpcDGtVAmHLLku?mode=r_t";
+            } catch (error) {
+                console.error("Erro ao enviar para o webhook:", error);
+                alert("Ocorreu um erro ao enviar seus dados. Por favor, tente novamente.");
+            }
+        });
+    </script>
+
+
+
+</body>
+
+</html>
