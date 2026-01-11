@@ -14,38 +14,55 @@
 <body>
     <section class="hero">
         <div class="container">
-            <h2>Entre no nosso grupo gratuito para ter acesso a diversos materiais gratuitos</h2>
-            <p>Templates de automações de n8n gratuitos + networking.</p>
+            <h2>Domine o mercado de IA e escale sua Agência para R$ 10k/mês</h2>
+            <p>Tenha acesso ao Protocolo 10K com IA + Templates de n8n gratuitos + grupo de Networking</p>
 
             <div class="modal-content">
-                <h4>Cadastre-se para acessar o material gratuito e o grupo de networking 👇</h4>
+                <h4>Cadastre-se para acessar o material e o grupo de networking 👇</h4>
                 <form id="whatsapp-form">
                     <input type="text" id="nome" placeholder="Seu nome" required />
-                    <input type="text" id="email" placeholder="Seu melhor email" required />
-                    <input type="text" id="telefone" placeholder="Seu WhatsApp (com DDD)" required />
-                    <button type="submit" class="btn">Acesse os templates gratuitos</button>
+
+                    <input type="email" id="email" placeholder="Seu melhor e-mail" required />
+                    <input type="tel" id="telefone" placeholder="Seu WhatsApp (com DDD)" required maxlength="15" />
+
+                    <button type="submit" id="submit-btn" class="btn">Quero os templates + Protocolo</button>
                 </form>
             </div>
-
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 Omni IA. Todos os direitos reservados.</p>
+            <p>&copy; 2026 Omni IA. Todos os direitos reservados.</p>
         </div>
     </footer>
+
     <script>
+        // 3. MÁSCARA DE TELEFONE: Melhora a experiência do usuário (UX)
+        const telInput = document.getElementById("telefone");
+        telInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, "");
+            value = value.replace(/^(\22)(\d)/g, "($1) $2"); // Ajuste para DDD 2 dígitos
+            if (value.length > 2) value = "(" + value.substring(0, 2) + ") " + value.substring(2);
+            if (value.length > 9) value = value.substring(0, 10) + "-" + value.substring(10);
+            e.target.value = value;
+        });
+
         document.getElementById("whatsapp-form").addEventListener("submit", async function (e) {
             e.preventDefault();
 
+            const submitBtn = document.getElementById("submit-btn");
             const nome = document.getElementById("nome").value.trim();
             const email = document.getElementById("email").value.trim();
-            const telefoneInput = document.getElementById("telefone");
-            const telefone = telefoneInput.value.replace(/\D/g, ""); // remove não-números
+            const telefone = telInput.value.replace(/\D/g, "");
+
+            // 3. FEEDBACK DE ENVIO: Evita cliques duplos e informa o usuário
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "Enviando acesso...";
+            submitBtn.style.opacity = "0.7";
 
             try {
-                await fetch("https://n8n.johnvic.shop/webhook/leadmagnet", {
+                const response = await fetch("https://n8n.johnvic.shop/webhook/leadmagnet", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -53,21 +70,28 @@
                     body: JSON.stringify({
                         nome: nome,
                         telefone: telefone,
-                        email: email
+                        email: email,
+                        origem: "Pagina de Captura"
                     })
                 });
 
-                // Redireciona para o grupo do WhatsApp
-                window.location.href = "https://chat.whatsapp.com/JHYmOfFvMpcDGtVAmHLLku?mode=r_t";
+                if (response.ok) {
+                    // Redireciona para o grupo do WhatsApp
+                    window.location.href = "https://cosmic-hill-e5f.notion.site/Ag-ncia-de-IA-2026-o-Protocolo-de-R-10k-m-s-2e1c30ca3ce48047b6eed63a9fbc32af";
+                } else {
+                    throw new Error("Erro no servidor");
+                }
             } catch (error) {
                 console.error("Erro ao enviar para o webhook:", error);
-                alert("Ocorreu um erro ao enviar seus dados. Por favor, tente novamente.");
+                alert("Ocorreu um erro. Verifique sua conexão e tente novamente.");
+
+                // Restaura o botão em caso de erro
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = "Quero os templates + Protocolo";
+                submitBtn.style.opacity = "1";
             }
         });
     </script>
-
-
-
 </body>
 
 </html>
